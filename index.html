@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>PID-MDL</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div id="image"></div>
+        <div id="hide-back"></div>
+        <div id="loading-page">
+            <table class="test">
+                <tr>
+                    <td align="center" style="height: 40px;">
+                        <div class="loader"></div>
+                        <div class="word">&nbsp;&nbsp;&nbsp;載入中，請稍後</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="div-btn">
+            <button id="exBtn" class="exchange" onclick="showMessage(true)">兌換優惠</button>
+        </div>
+        <div id="myDIV" style="display: none;">
+            <div class="prompt">
+                <table class="message">
+                    <tr>
+                        <td style="font-size: 130%;">確認兌換優惠</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 90%; letter-spacing: 2px;">請確認您已在麥當勞櫃檯，點選「立即兌換」後，需於兩分鐘內出示給結帳人員</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 90%; text-align: right;">
+                            <div style="margin-right: 10px; color: #a6a6a6;" onclick="showMessage(false)">暫不兌換</div>
+                            <div style="color: #a6a6a6;" onclick="exchange()">立即兌換</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+let image = document.getElementById("image");
+if (urlParams.get('item') === null) {
+    urlParams.get('item') = 1;
+}
+image.style.backgroundImage = "url('item" + urlParams.get('item') + ".jpeg')"
+
+const message = document.getElementById("myDIV");
+const hideBack = document.getElementById("hide-back");
+const loadPage = document.getElementById("loading-page");
+const exBtn = document.getElementById("exBtn");
+
+var startDate = new Date();
+var endDate = new Date();
+    endDate.setMinutes(startDate.getMinutes()+2);
+var spantime = (endDate - startDate)/1000;
+ 
+function cal(){
+    spantime --;
+    var d = Math.floor(spantime / (24 * 3600));
+    var h = Math.floor((spantime % (24*3600))/3600);
+    var m = Math.floor((spantime % 3600)/(60));
+    var s = Math.floor(spantime%60);
+    str = "0" + m + " : " + s;
+    
+    exBtn.innerHTML = "";
+    exBtn.innerHTML += '<i class="fa fa-clock-o"></i>' + "\xa0\xa0優惠倒數\xa0\xa0\xa0" +  str;
+}
+
+function showMessage(show) {
+    if (show === true) {
+        message.style.display = "block";
+        hideBack.style.zIndex = 1;
+    } else {
+        message.style.display = "none";
+        hideBack.style.zIndex = -1;
+    }
+}
+function exchange() {
+    message.style.display = "none";
+    loadPage.style.zIndex = 2;
+    window.setTimeout(function() {
+        hideBack.style.zIndex = -1;
+        loadPage.style.zIndex = -2;
+    }, 500);
+    setInterval(cal, 1000);
+}
+</script>
+
+<style>
+td div {
+    display: inline-block;
+    vertical-align: top;
+    height: 40px;
+    line-height: 40px;
+    color: #a6a6a6;
+}
+.test {
+    width: 100%;
+    height: 100%;
+}
+.loader {
+    line-height: 10vh;
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #6e6e6e;
+    border-left: 4px solid #6e6e6e;
+    border-right: 4px solid #6e6e6e;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#loading-page {
+    text-align: center;
+    border-radius: 2px;
+    position: absolute;
+    background-color: white;
+    z-index: -2;
+    width: 80%;
+    height: 10%;
+    top:0; left:0; right:0; bottom:0;
+	margin: auto;
+}
+#hide-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    height: 100vh;
+    width: 100%;
+    opacity: 0.3;
+    background-color: black;
+}
+#image {
+    height: 100vh;
+    width: 100%;
+    background-image: url(item2.jpeg);
+    background-size:100% 100%;
+    z-index: 0;
+}
+#myDIV {
+    width: 100%;
+    padding: 0 26px;    
+    position: fixed;
+    top: 38%;
+    height: 22%;
+    z-index: 10;
+}
+.prompt {
+    padding: 8px 18px 0px 18px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 2px;
+    text-align: left;
+}
+.div-btn {
+    position: fixed;
+    width: 100%;
+    height: 8%;
+    padding: 0 6px;
+    bottom: 7px;
+}
+.exchange {
+    font-weight: 300;
+    font-size: 25px;
+    border-width: 0;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: #FFAC12;
+    color: white;
+}
+@media only screen and (min-height: 641px) {
+    .message {
+        border-collapse: separate;
+        border-spacing: 6px;
+    }
+}
+</style>
