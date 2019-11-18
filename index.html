@@ -51,10 +51,12 @@
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 let image = document.getElementById("image");
-if (urlParams.get('item') === null) {
-    urlParams.get('item') = 1;
+// console.log(urlParams.get('item'));
+if (urlParams.get('item') != undefined || urlParams.get('item') != null) {
+    image.style.backgroundImage = "url('" + urlParams.get('item') + ".jpeg')"
+} else {
+    image.style.backgroundImage = "url('h1.jpeg')"
 }
-image.style.backgroundImage = "url('item" + urlParams.get('item') + ".jpeg')"
 
 const message = document.getElementById("myDIV");
 const hideBack = document.getElementById("hide-back");
