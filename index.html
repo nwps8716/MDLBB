@@ -49,9 +49,15 @@
 </html>
 
 <script>
+const bodyElem = document.getElementsByTagName('body')[0];
+const htmlElem = document.getElementsByTagName('html')[0];
+htmlElem.style['overflow-y'] = 'hidden';
+htmlElem.style['height'] = '100%';
+bodyElem.style['overflow-y'] = 'hidden';
+bodyElem.style['height'] = '100%';
+
 const urlParams = new URLSearchParams(window.location.search);
 let image = document.getElementById("image");
-// console.log(urlParams.get('item'));
 if (urlParams.get('item') != undefined || urlParams.get('item') != null) {
     image.style.backgroundImage = "url('" + urlParams.get('item') + ".jpeg')"
 } else {
@@ -101,6 +107,10 @@ function exchange() {
 </script>
 
 <style>
+html, body {
+    width: 100%;
+    height: 100%;
+}
 td div {
     display: inline-block;
     vertical-align: top;
